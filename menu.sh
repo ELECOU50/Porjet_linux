@@ -5,7 +5,7 @@ sous_menu() {
     local sous_menu
     while true; do
         choix=$(dialog --clear --title "Sous-Menu" \
-                --menu "Choisissez une option:" 15 50 4 \
+                --menu "Choisissez une option:" 15 50 2 \
                 1 "Afficher la grille" \
                 2 "Retourner au menu" \
                 2>&1 >/dev/tty)
@@ -26,7 +26,7 @@ menu_principal() {
     local menu_principal
     while true; do
         choix=$(dialog --clear --title "Menu Principal" \
-                --menu "Choisissez une option:" 17 50 4 \
+                --menu "Choisissez une option:" 17 50 10 \
                 1 "Structures stables" \
                 2 "Oscillateurs" \
                 3 "Vaisseaux" \
