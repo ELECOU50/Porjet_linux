@@ -97,7 +97,7 @@ sous_menu2() {
         while true; do
                 # Affichage du menu
                 choix=$(dialog --clear --title "Voulez vous quitter le jeu ?" \
-                        --menu " " 17 50 4 \
+                        --menu " " 17 50 2 \
                         1 "Oui" \
                         2 "Non" \
                         2>&1 >/dev/tty)
