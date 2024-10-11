@@ -1,28 +1,47 @@
 #!/bin/bash
 
-    # Demande à l'utilisateur de saisir une valeur
-    dialog --inputbox "Longueur du plateau de jeu :" 8 40 2>output.txt
+# Initialisation des variables
+grille_x=0
+grille_y=0
+ligne=0
+colonne=0
 
-    # Récupère la valeur saisie
-    grille_x=$(<output.txt)
+# On vérifie que les valeurs saisies pour créer la grille sont entre 1 et 9
+while [[ "$grille_x" != +([1-9]) ]] || [ "$grille_x" -gt 9 ]; do
+        # Demande à l'utilisateur de saisir une valeur
+        dialog --inputbox "Longueur du plateau de jeu :" 8 40 2>output.txt
 
-    # Affiche la valeur saisie dans une boîte de message
-    dialog --msgbox "Valeur saisie : $grille_x" 6 40
+        # Récupère la valeur saisie
+        grille_x=$(<output.txt)
 
-    # Nettoie le fichier temporaire
-    rm -f output.txt
+        if [[ "$grille_x" != +([1-9]) ]] || [ "$grille_x" -gt 9 ]; then
+                dialog --title "Error" --msgbox "La valeur $grille_x n'est pas valide" 6 40
+        else
+                # Affiche la valeur saisie dans une boîte de message
+                dialog --msgbox "Valeur saisie : $grille_x" 6 40
+        fi
 
-    # Demande à l'utilisateur de saisir une valeur
-    dialog --inputbox "Hauteur du plateau de jeu :" 8 40 2>output.txt
+        # Nettoie le fichier temporaire
+        rm -f output.txt
+done
 
-    # Récupère la valeur saisie
-    grille_y=$(<output.txt)
+while [[ "$grille_y" != +([1-9]) ]] || [ "$grille_y" -gt 9 ]; do
+        # Demande à l'utilisateur de saisir une valeur
+        dialog --inputbox "Hauteur du plateau de jeu :" 8 40 2>output.txt
 
-    # Affiche la valeur saisie dans une boîte de message
-    dialog --msgbox "Valeur saisie : $grille_y" 6 40
+        # Récupère la valeur saisie
+        grille_y=$(<output.txt)
 
-    # Nettoie le fichier temporaire
-    rm -f output.txt
+        if [[ "$grille_y" != +([1-9]) ]] || [ "$grille_y" -gt 9 ]; then
+                dialog --title "Error" --msgbox "La valeur $grille_y n'est pas valide" 6 40
+        else
+                # Affiche la valeur saisie dans une boîte de message
+                dialog --msgbox "Valeur saisie : $grille_y" 6 40
+        fi
+
+        # Nettoie le fichier temporaire
+        rm -f output.txt
+done
 
 # Fonction pour afficher la grille avec dialog
 display_grid() {
@@ -47,48 +66,9 @@ display_grid() {
         done
     done
 
+    # Affichage de la grille
     dialog --clear --title "Grille de Jeu" --msgbox "$grille" 30 30
-    jouer
-}
-
-jouer() {
-        local jouer
-        dialog --inputbox "Sur quel ligne voulez-vous jouer ?" 8 40 2>output.txt
-        ligne=$(<output.txt)
-        dialog --msgbox "Case saisie : $ligne" 6 40
-        # Soustrait -1 car c'est un tableau
-        ((ligne--))
-        rm -f output.txt
-        dialog --inputbox "Sur quel colonne voulez-vous jouer ?" 8 40 2>output.txt
-        colonne=$(<output.txt)
-        dialog --msgbox "Case saisie : $colonne" 6 40
-        # Soustrait -1 car c'est un tableau
-        ((colonne--))
-        rm -f output.txt
-
-
-                grille="-"
-                for((z=0;z<grille_x;z++));do
-                        grille+="--"
-                done
-                for((y=0;y<grille_y;y++));do
-                        grille+="\n|"
-                        for((i=0;i<grille_x;i++));do
-                                # If pour identifier quel case a été selectionné par l'utilisateur
-                                if [ "$i" -eq "$colonne" ] && [ "$y" -eq "$ligne" ]; then
-                                        # Rempli la case sélectionné
-                                        grille+="█|"
-                                else
-                                        grille+=" |"
-                                fi
-                        done
-                        grille+="\n-"
-                        for((z=0;z<grille_x;z++));do
-                                grille+="--"
-                        done
-                done
-        # Affiche la nouvelle grille
-        dialog --clear --title "Grille de Jeu" --msgbox "$grille" 30 30
+    source ./jouer.sh
 }
 
 sous_menu2() {
