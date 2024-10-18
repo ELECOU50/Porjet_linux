@@ -1,0 +1,3 @@
+#!/bin/bash
+
+dialog --msgbox "Cette figure étant trop grande, elle ne peut pas être siumlée ici, mais voici une courte présentation d'un Constructeur Universels :\n En 2010, Gemini, le tout premier constructeur universel du jeu de la Vie, fut découvert. Cette immense figure fait 4 217 807 cellules sur 4 220 191. En avançant, cette figure crée une copie d'elle-même en détruisant la précédente. L'opération prend environ 34 millions de générations. Comme Gemini se déplace et ne laisse rien derrière lui, c'est aussi un vaisseau. C'est d'ailleurs le premier vaisseau à se déplacer obliquement, c'est-à-dire ni orthogonalement ni diagonalement." "25" "75"
