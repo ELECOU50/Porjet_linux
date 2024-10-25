@@ -86,11 +86,13 @@ DisplayGrid() {
     done
     output+="+\n"
 
-    dialog --msgbox "$output" "26" "56"
+    dialog --yesno "$output" "26" "56"
+    response=$?
 }
 
+
 # Fonction pour compter les voisins vivants d'une cellule
-CountNeighbors() {
+CompteurCellule() {
     local x=$1
     local y=$2
     local count=0
@@ -116,16 +118,16 @@ CountNeighbors() {
 NextGen() {
     for ((i=0; i<$ROWS; i++)); do
         for ((j=0; j<$COLS; j++)); do
-            local neighbors=$(CountNeighbors $i $j)
+            local cellule=$(CompteurCellule $i $j)
 
             if [[ ${grid[$i,$j]} -eq 1 ]]; then
-                if [[ $neighbors -lt 2 || $neighbors -gt 3 ]]; then
+                if [[ $cellule -lt 2 || $cellule -gt 3 ]]; then
                     newGrid[$i,$j]=0  # Meurt
                 else
                     newGrid[$i,$j]=1  # Survit
                 fi
             else
-                if [[ $neighbors -eq 3 ]]; then
+                if [[ $cellule -eq 3 ]]; then
                     newGrid[$i,$j]=1  # Naît
                 else
                     newGrid[$i,$j]=0
@@ -148,22 +150,27 @@ sous_menu1() {
         choix=$(dialog --clear --title "Sous-Menu" \
                 --menu "Choisissez une option:" 15 50 2 \
                 1 "Afficher la grille" \
-                2 "Retourner au menu" \
+		2 "A propos" \
+                3 "Retourner au menu" \
                 2>&1 >/dev/tty)
 
         case $choix in
             1) dialog --clear --msgbox "Affichage de la grille" 5 40
+               # Exécution du script avec dialogue
+               InitGrid
                while true; do
-                        # Exécution du script avec dialogue
-                        InitGrid
-                        while true; do
-                                DisplayGrid
-                                NextGen
-                                sleep 0.5  # Pause de 0.5 seconde entre chaque génération pour une meilleure visualisation
-                        done
-                        break
-               done ;;
-            2) break ;;
+               		DisplayGrid
+                        NextGen
+                        sleep 0.1  # Pause de 0.1 seconde entre chaque génération pour une meilleure visualisation
+			if [ $response -ne 0 ]; then
+        			dialog --clear --msgbox "Retour au menu" 10 40
+				sous_menu1
+				break
+    			fi
+                done ;;
+	    2) dialog --clear --msgbox "Les canons sont des configurations qui émettent un autre motif, tel qu'un vaisseau, à intervalles réguliers. Ces vaisseaux sont des motifs qui continuent de se déplacer sur la grille de jeu. La périodicité des canons, soit l'intervalle de temps après lequel ils répètent leur comportement, peut varier." 20 40
+	       sous_menu1 ;;
+            3) break ;;
             *) dialog --clear --msgbox "Option invalide" 5 40 ;;
         esac
         break
